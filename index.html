@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Interativa de Carros de Luxo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #222;
+        }
+        .car-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 400px;
+            aspect-ratio: 1 / 0.7;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card .image-box {
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+        }
+        .card .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 90%;
+            border-radius: inherit;
+            transition: 0.5s ease-in-out;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid white;
+            border-radius: inherit;
+            transition: 0.4s ease-in-out;
+        }
+        .card:hover img {
+            filter: grayscale(1) brightness(0.4);
+        }
+        .card:hover::after {
+            opacity: 1;
+            inset: 20px;
+        }
+        .content {
+            width: 80%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            color: white;
+        }
+        .card:hover .content {
+            opacity: 1;
+        }
+        footer {
+            margin-top: 40px;
+        }
+        footer p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        .car-detail {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+        .car-detail-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            margin: 2% auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .car-detail-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .car-part {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .car-part:hover {
+            background: rgba(255, 255, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Galeria Interativa de Carros de Luxo</h1>
+    </header>
+
+    <div class="car-grid">
+        <div class="card" data-car="porsche">
+            <div class="image-box">
+                <img src="https://quatrorodas.abril.com.br/wp-content/uploads/2023/08/edit-Porsche-911-GT3-RS-11628.jpg?crop=1&resize=1212,909" alt="Porsche 911 GT3 RS">
+            </div>
+            <div class="content">
+                <h2>Porsche 911 GT3 RS</h2>
+                <p>O ápice da engenharia esportiva, combinando desempenho de pista com elegância para as ruas.</p>
+            </div>
+        </div>
+
+        <div class="card" data-car="ferrari">
+            <div class="image-box">
+                <img src="https://directimports.com.br/wp-content/uploads/2023/04/ferrari-sf90-stradale-2023-1.webp" alt="Ferrari SF90 Stradale">
+            </div>
+            <div class="content">
+                <h2>Ferrari SF90 Stradale</h2>
+                <p>Um híbrido plug-in que redefine o conceito de supercarros com potência impressionante e tecnologia de ponta.</p>
+            </div>
+        </div>
+
+        <div class="card" data-car="lamborghini">
+            <div class="image-box">
+                <img src="https://i.pinimg.com/600x315/83/39/d3/8339d39dc82bfda2cb60444698b5d174.jpg" alt="Lamborghini Aventador">
+            </div>
+            <div class="content">
+                <h2>Lamborghini Aventador</h2>
+                <p>Design futurista e motor V12 que entrega uma experiência de condução única e emocionante.</p>
+            </div>
+        </div>
+
+        <div class="card" data-car="astonmartin">
+            <div class="image-box">
+                <img src="https://www.astonmartinsaopaulo.com.br/pub/content/aston-mart_1_220830_2645.jpg?mw=1980&rev=6adbc4f086f1460b82775b2bc96716bb&format=webp&hash=2A1986FC1843130D51796F72460877EA" alt="Aston Martin Vantage">
+            </div>
+            <div class="content">
+                <h2>Aston Martin Vantage</h2>
+                <p>Elegância britânica combinada com desempenho esportivo, um verdadeiro ícone de estilo e potência.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="car-detail" id="carDetail">
+        <div class="car-detail-content">
+            <span class="car-detail-close">&times;</span>
+            <img id="detailImage" src="" alt="Detalhes do Carro" style="width:100%;height:100%;object-fit:cover;">
+            <div id="carParts"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Galeria de Carros de Luxo. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const carDetails = {
+            porsche: {
+                image: "https://quatrorodas.abril.com.br/wp-content/uploads/2023/08/edit-Porsche-911-GT3-RS-11628.jpg?crop=1&resize=1212,909",
+                parts: [
+                    { top: "25%", left: "15%", text: "Faróis LED Matrix" },
+                    { top: "45%", left: "5%", text: "Rodas de magnésio forjadas" },
+                    { top: "15%", right: "20%", text: "Aerofólio traseiro ajustável DRS" },
+                    { bottom: "30%", left: "25%", text: "Saias laterais aerodinâmicas" },
+                    { top: "40%", right: "10%", text: "Entradas de ar para resfriamento dos freios" }
+                ]
+            },
+            ferrari: {
+                image: "https://directimports.com.br/wp-content/uploads/2023/04/ferrari-sf90-stradale-2023-1.webp",
+                parts: [
+                    { bottom: "25%", left: "20%", text: "Faról Dianteiro" },
+                    { top: "50%", left: "5%", text: "Rodas de liga leve de 20 polegadas" },
+                    { top: "10%", right: "15%", text: "Aerofólio ativo" },
+                    { top: "20%", left: "10%", text: "Sistema híbrido plug-in" },
+                    { top: "35%", right: "5%", text: "Escapamento de titânio" }
+                ]
+            },
+            lamborghini: {
+                image: "https://s2-autoesporte.glbimg.com/M3LP5O96N2cTgeaDSo-hWf8rxfg=/0x0:1280x853/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_cf9d035bf26b4646b105bd958f32089d/internal_photos/bs/2021/X/S/SSjzBeSoaAQessJx6xJg/lambofrente.jpg",
+                parts: [
+                    { top: "40%", left: "10%", text: "Portas em tesoura" },
+                    { top: "15%", left: "20%", text: "Faróis LED Y-shape" },
+                    { top: "30%", right: "15%", text: "Entradas de ar laterais" },
+                    { bottom: "20%", left: "30%", text: "Sistema de escape quádruplo" },
+                    { top: "5%", right: "25%", text: "Teto de fibra de carbono" }
+                ]
+            },
+            astonmartin: {
+                image: "https://images.jazelc.com/uploads/longislandsportscars-m2e/V12-Vantage-Roadster.jpg",
+                parts: [
+                    { top: "25%", left: "25%", text: "Grade frontal característica" },
+                    { top: "35%", right: "20%", text: "Saídas de ar laterais" },
+                    { top: "10%", right: "30%", text: "Teto de contraste" },
+                    { bottom: "15%", left: "35%", text: "Difusor traseiro esportivo" },
+                    { top: "45%", left: "15%", text: "Rodas de liga leve de 20 polegadas" }
+                ]
+            }
+        };
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const car = card.getAttribute('data-car');
+                const detail = carDetails[car];
+                document.getElementById('detailImage').src = detail.image;
+                const partsContainer = document.getElementById('carParts');
+                partsContainer.innerHTML = '';
+                detail.parts.forEach(part => {
+                    const div = document.createElement('div');
+                    div.className = 'car-part';
+                    div.textContent = part.text;
+                    Object.assign(div.style, part);
+                    div.addEventListener('click', () => alert(part.text));
+                    partsContainer.appendChild(div);
+                });
+                document.getElementById('carDetail').style.display = 'block';
+            });
+        });
+
+        document.querySelector('.car-detail-close').addEventListener('click', () => {
+            document.getElementById('carDetail').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
